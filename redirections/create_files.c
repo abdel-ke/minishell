@@ -14,19 +14,16 @@
 
 int	create_write(t_cflist *tmp, int *fd, t_cflist **w)
 {
-	if (tmp->name[0] == '$')
+	if (tmp->name[0] == '$' && tmp->name[1] != '?' && tmp->file_dollar
+		&& ft_strlen(tmp->name) != 1)
 	{
 		g_check.exit_status = -2;
-		error_nodir(tmp->name);
+		error_file_nodir(tmp->name);
 		return (-1);
 	}
 	*fd = open(tmp->name, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	if (*fd == -1)
-	{
-		error_nodir(tmp->name);
-		g_check.exit_status = -2;
+	if (wapp_error(tmp, fd) == -1)
 		return (-1);
-	}
 	close(*fd);
 	*w = tmp;
 	return (0);
@@ -34,38 +31,33 @@ int	create_write(t_cflist *tmp, int *fd, t_cflist **w)
 
 int	create_read(t_cflist *tmp, int *fd, t_cflist **r)
 {
-	if (tmp->name[0] == '$')
+	if (tmp->name[0] == '$' && tmp->name[1] != '?' && tmp->file_dollar
+		&& ft_strlen(tmp->name) != 1)
 	{
 		g_check.exit_status = -2;
-		error_nodir(tmp->name);
+		error_file_nodir(tmp->name);
 		return (-1);
 	}
 	*fd = open(tmp->name, O_RDONLY);
-	if (*fd == -1)
-	{
-		error_nodir(tmp->name);
-		g_check.exit_status = -2;
+	if (r_error(tmp, fd) == -1)
 		return (-1);
-	}
+	close(*fd);
 	*r = tmp;
 	return (0);
 }
 
 int	create_append(t_cflist *tmp, int *fd, t_cflist **w)
 {
-	if (tmp->name[0] == '$')
+	if (tmp->name[0] == '$' && tmp->name[1] != '?' && tmp->file_dollar
+		&& ft_strlen(tmp->name) != 1)
 	{
 		g_check.exit_status = -2;
-		error_nodir(tmp->name);
+		error_file_nodir(tmp->name);
 		return (-1);
 	}
 	*fd = open(tmp->name, O_CREAT | O_WRONLY | O_APPEND, 0666);
-	if (*fd == -1)
-	{
-		error_nodir(tmp->name);
-		g_check.exit_status = -2;
+	if (wapp_error(tmp, fd) == -1)
 		return (-1);
-	}
 	close(*fd);
 	*w = tmp;
 	return (0);

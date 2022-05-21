@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 15:22:04 by abdel-ke          #+#    #+#             */
-/*   Updated: 2021/04/23 11:28:09 by abdel-ke         ###   ########.fr       */
+/*   Updated: 2021/04/29 14:48:56 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	add_new_env_element(t_env *curr_node, char *env)
 	int		len;
 
 	len = 0;
-	while (env[len] != '=')
+	while (env[len] != '\0' && env[len] != '=')
 		len++;
 	curr_node->name = ft_substr(env, 0, len);
 	curr_node->value = ft_strdup(env + len + 1);

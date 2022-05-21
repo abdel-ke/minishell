@@ -6,7 +6,7 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 11:50:59 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/22 16:35:32 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/29 16:27:17 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void	execute_export(t_mini *mini)
 	{
 		sort_list(mini->export_env);
 		print_export(mini->export_env, mini->glob.fd_red);
+		if (mini->glob.fd_red != 1 && mini->cmds.type == PIPE)
+			print_export(mini->export_env, 1);
 	}
 	while (mini->cmds.cmd[i] != NULL)
 	{

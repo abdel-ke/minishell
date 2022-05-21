@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   call_execve.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:47:31 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/24 16:39:16 by abdel-ke         ###   ########.fr       */
+/*   Updated: 2021/04/30 12:17:35 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,25 @@ void	execute_child(t_mini *mini, int fds, char **env, char *path)
 {
 	if (dup2(mini->glob.fd_in, 0) == -1)
 		ft_putendl_fd(strerror(errno), 1);
-	if (fds)
-	{
-		dup2(fds, 1);
-		close(fds);
-	}
-	else if (mini->cmds.type == PIPE)
+	if (mini->cmds.type == PIPE)
 	{
 		if (dup2(mini->fd[1], 1) == -1)
 			ft_putendl_fd(strerror(errno), 1);
 		close(mini->fd[0]);
 	}
+	fds = redir(mini);
+	if (fds == -1)
+		exit(0);
+	if (fds != 0)
+	{
+		dup2(fds, 1);
+		close(fds);
+	}
 	if (check_pipe_builtins(mini) == 1)
+	{
 		execute_builtins(mini);
-	else if (check_pipe_builtins(mini) == 0)
+	}
+	if (check_pipe_builtins(mini) == 0)
 	{
 		if (execve(path, mini->cmds.cmd, env) != 0)
 			g_check.exit_status = 1;
@@ -38,9 +43,6 @@ void	execute_child(t_mini *mini, int fds, char **env, char *path)
 
 int	help_execve(t_mini *mini, char **env, char *path)
 {
-	mini->fds = redir(mini);
-	if (mini->fds == -1)
-		exit(0);
 	if (mini->pid == -1)
 	{
 		g_check.exit_status = 1;
@@ -92,9 +94,7 @@ void	call_execve(t_mini *mini, char **env, char *path)
 	mini->fds = create_files(mini, &w, &r, &fd);
 	if (mini->fds == -1)
 		return ;
-		printf("FD0 |%d|\n", mini->fds);
 	pipe(mini->fd);
-		printf("FD1 |%d|\n", mini->fds);
 	mini->pid = fork();
 	if (mini->pid == -1 || mini->pid == 0)
 		help_execve(mini, env, path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/12 18:30:33 by abdel-ke          #+#    #+#             */
-/*   Updated: 2021/04/20 15:40:06 by abdel-ke         ###   ########.fr       */
+/*   Updated: 2021/04/27 14:37:50 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 void	off_flags(t_symbol *smbl)
 {
-	smbl->d_great = 0;
-	smbl->less = 0;
-	smbl->great = 0;
+	smbl->append = 0;
+	smbl->write = 0;
+	smbl->read = 0;
 	smbl->semi = 0;
 	smbl->pipe = 0;
 }
 
 void	ft_error(t_symbol *smbl, char *str)
 {
-	ft_putstr_fd(RED, 1);
+	ft_putstr_fd("minishell: ", 1);
 	ft_putendl_fd(str, 1);
-	ft_putstr_fd(WHITE, 1);
+	g_check.exit_status = 258;
 	smbl->error = ON;
 }
 
@@ -44,13 +44,17 @@ int	count_back(char *line)
 	return (1);
 }
 
-void	error_red(t_symbol *smbl, char *error, char c)
+void	error_red(t_symbol *smbl, char c)
 {
 	if (c == 63)
-		printf("%s%s `%s'%s\n", RED, error, ">>", WHITE);
+		ft_error(smbl, "syntax error near unexpected token `>>'");
 	else
-		printf("%s%s `%c'%s\n", RED, error, c, WHITE);
-	smbl->error = 1;
+	{
+		if (c == '>')
+			ft_error(smbl, "syntax error near unexpected token `>'");
+		else if (c == '<')
+			ft_error(smbl, "syntax error near unexpected token `<'");
+	}
 }
 
 char	*partition_stage(t_symbol *smbl, char *line)
@@ -63,20 +67,20 @@ char	*partition_stage(t_symbol *smbl, char *line)
 	if (line[0] == '|')
 	{
 		if (line[1] == '|')
-			ft_error(smbl, "bash: syntax error near unexpected token `||'");
+			ft_error(smbl, "syntax error near unexpected token `||'");
 		else
-			ft_error(smbl, "bash: syntax error near unexpected token `|'");
+			ft_error(smbl, "syntax error near unexpected token `|'");
 	}
 	if (line[0] == ';')
 	{
 		if (line[1] == ';')
-			ft_error(smbl, "bash: syntax error near unexpected token `;;'");
+			ft_error(smbl, "syntax error near unexpected token `;;'");
 		else
-			ft_error(smbl, "bash: syntax error near unexpected token `;'");
+			ft_error(smbl, "syntax error near unexpected token `;'");
 	}
 	line = check_symbols(smbl, line, -1);
-	if (!smbl->error && (smbl->d_great || smbl->d_quote || smbl->s_quote
-			|| smbl->pipe || smbl->great || smbl->less))
+	if (!smbl->error && (smbl->append || smbl->d_quote || smbl->s_quote
+			|| smbl->pipe || smbl->read || smbl->write))
 		ft_error(smbl, "syntax error near unexpected token `newline'");
 	return (line);
 }

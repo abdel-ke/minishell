@@ -6,7 +6,7 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 22:34:56 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/22 16:34:03 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/30 12:18:53 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,9 @@ int	check_pipe_builtins(t_mini *mini)
 		return (1);
 	if (ft_strcmp(mini->cmds.cmd[0], "env") == 0)
 		return (1);
-	if (ft_strcmp(mini->cmds.cmd[0], "export") == 0
-		&& mini->cmds.cmd[2] == NULL)
+	if (ft_strcmp(mini->cmds.cmd[0], "export") == 0)
 		return (1);
-	if (ft_strcmp(mini->cmds.cmd[0], "unset") == 0
-		&& mini->cmds.cmd[2] == NULL)
+	if (ft_strcmp(mini->cmds.cmd[0], "unset") == 0)
 		return (1);
 	return (0);
 }

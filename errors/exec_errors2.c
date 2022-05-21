@@ -1,39 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_errors.c                                      :+:      :+:    :+:   */
+/*   exec_errors2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/31 16:43:14 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/28 15:48:47 by amouassi         ###   ########.fr       */
+/*   Created: 2021/04/26 14:05:32 by amouassi          #+#    #+#             */
+/*   Updated: 2021/04/26 14:07:01 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	error_command(char *command)
+void	error_nodir(char *command)
 {
 	ft_putstr("minishell: ");
 	ft_putstr(command);
-	ft_putstr(": command not found\n");
+	ft_putstr(": No such file or directory\n");
 }
 
-void	error_permission(char *command)
+void	current_dir_err(void)
 {
-	ft_putstr("minishell: ");
-	ft_putstr(command);
-	ft_putstr(": Permission denied\n");
+	ft_putstr_fd("cd: error retrieving current directory:", 1);
+	ft_putstr_fd(" getcwd: cannot access parent directories:", 1);
+	ft_putendl_fd(" No such file or directory", 1);
 }
 
-void	error_file_nodir(char *command)
+void	error_dir(char *command)
 {
 	ft_putstr("minishell: ");
 	ft_putstr(command);
-	if (command[0] == '$' && command[0] != '?')
-		ft_putstr(": ambiguous redirect\n");
-	else if (command[0] == '/')
-		ft_putstr(": Permission denied\n");
-	else
-		ft_putstr(": No such file or directory\n");
+	ft_putstr(": Is a directory\n");
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 21:29:11 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/24 14:53:11 by abdel-ke         ###   ########.fr       */
+/*   Updated: 2021/04/29 16:29:25 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 # define RED	"\e[0;31m"
 # define WHITE	"\033[0m"
 # define BLUE "\e[0;34m"
+
 typedef struct s_termcap
 {
 	int				ret;
@@ -59,6 +60,7 @@ typedef struct s_termcap
 	char			*histadd;
 	int				histpos;
 	int				check;
+	int				check2;
 	char			*save;
 	struct winsize	win;
 }				t_termcap;
@@ -102,6 +104,7 @@ typedef struct s_cflist
 {
 	char				*name;
 	t_type				type;
+	int					file_dollar;
 	struct s_cflist		*next;
 }						t_cflist;
 
@@ -125,9 +128,9 @@ typedef struct s_symbol
 	int		pipe;
 	int		d_quote;
 	int		s_quote;
-	int		less;
-	int		great;
-	int		d_great;
+	int		read;
+	int		write;
+	int		append;
 	int		error;
 	int		already_pipe;
 }					t_symbol;
@@ -161,7 +164,6 @@ typedef struct s_minishell
 */
 char			*ft_strndup(char *s, size_t len);
 void			ft_putstr(char *s);
-char			*ft_strncpy(char *str, int n);
 int				ft_maxlen(char *s1, char *s2);
 int				check_isnumeriq(char *str);
 int				check_spec_char(char *str);
@@ -188,7 +190,6 @@ int				minishell(t_mini *mini);
 void			sort_list(t_list *list);
 void			print_list(t_list *list, int fd);
 t_list			*init_list(void);
-void			delete_node(t_list *list, char *name);
 char			**list_to_tabl(t_list *list);
 t_cflist		*cf_lst_new(void *name, int type);
 void			cf_lstadd_back(t_cflist **alst, t_cflist *new);
@@ -204,7 +205,10 @@ int				help_execve(t_mini *mini, char **env, char *path);
 int				s_help_execve(t_mini *mini);
 void			call_execve(t_mini *mini, char **env, char *path);
 int				check_permission(char *path);
+int				check_dir(char *path);
 void			get_path(t_mini *mini, char **split, char **path, int *perm);
+void			help_cd_home_cur(t_mini *mini);
+void			execute_cd_home_cur(t_mini *mini);
 /*
 ** execute builtins
 */
@@ -222,6 +226,9 @@ void			mod_oldpwd(t_mini *mini);
 void			reset_oldpwd(t_mini *mini, char *save_oldpwd);
 void			mod_pwd(t_mini *mini);
 void			mod_old(t_mini *mini, char *cwd);
+int				check_n(char *str);
+void			echo_dollar(t_mini *mini, char *cmd);
+int				get_n(char **cmd, int *b);
 /*
 ** error functions
 */
@@ -232,8 +239,11 @@ void			error_unset(char *str, t_mini *mini);
 void			error_exit(char *str);
 void			error_command(char *command);
 void			error_nodir(char *command);
+void			error_file_nodir(char *command);
 void			error_permission(char *command);
 void			current_dir_err(void);
+int				wapp_error(t_cflist *tmp, int *fd);
+int				r_error(t_cflist *tmp, int *fd);
 /*
 ** environ functions
 */
@@ -242,6 +252,8 @@ int				check_in_env(t_list *env, char *str);
 t_list			*init_env_environ(char **environ);
 t_list			*init_export_environ(char **environ);
 char			**ft_getenv(char *name, t_list *env);
+void			error_dir(char *command);
+void			unset_env(char *str, t_list **env);
 /*
 ** termcap functions
 */
@@ -268,7 +280,7 @@ int				redir_builtins(t_mini *mini);
 ** parsing functions
 */
 void			splitpipesemi(t_mini *mini);
-void			error_red(t_symbol *smbl, char *error, char c);
+void			error_red(t_symbol *smbl, char c);
 int				count_back(char *line);
 void			ft_error(t_symbol *smbl, char *str);
 void			ft_putstr_fd(char *s, int fd);
@@ -314,4 +326,10 @@ char			*get_path_dollar(t_mini *mini, char *line, int *j);
 char			*add_dollar_path(char *path);
 char			*file_dollar(char *line, char *path);
 void			add_new_env_element(t_env *curr_node, char *env);
+char			*dollar_digit(char *line, int *i);
+char			*dollar_simple(t_mini *mini, char *line, int *i);
+void			off_red(t_symbol *smbl);
+char			*get_path_dollar(t_mini *mini, char *line, int *j);
+char			*add_dollar_path(char *path);
+char			*file_dollar(char *line, char *path);
 #endif

@@ -6,7 +6,7 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 11:32:55 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/21 16:14:57 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/29 16:33:42 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	help_reset_oldpwd(t_mini *mini, char *save_oldpwd, char **old)
 		&& mini->glob.oldpwd_env == 0 )
 	{
 		if (save_oldpwd == NULL)
-			delete_node(mini->env, "OLDPWD");
+			unset_env("OLDPWD", &mini->env);
 		else
 			mod_env(mini->env, "OLDPWD", *old);
 	}

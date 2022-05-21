@@ -6,27 +6,34 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 14:46:29 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/23 12:05:59 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/30 12:10:50 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	help_execute_execve(t_mini *mini, int *check)
+{
+	g_check.exit_status = 127;
+	error_command(mini->cmds.cmd[0]);
+	*check = 1;
+}
+
 void	execute_execve(t_mini *mini, char **env, char **split)
 {
 	char	*path;
 	int		perm;
+	int		check;
 
 	path = NULL;
+	check = 0;
 	get_path(mini, split, &path, &perm);
-	call_execve(mini, env, path);
 	if (perm != 1 && mini->cmds.cmd[0] != NULL
 		&& check_isbuiltin(mini->cmds.cmd[0]) != 1
 		&& g_check.exit_status != -2)
-	{
-		g_check.exit_status = 127;
-		error_command(mini->cmds.cmd[0]);
-	}
+		help_execute_execve(mini, &check);
+	if (check == 0 || mini->cmds.type == PIPE)
+		call_execve(mini, env, path);
 	if (g_check.exit_status == -2)
 		g_check.exit_status = 1;
 	if (path != NULL)
@@ -37,11 +44,15 @@ void	execute_path(t_mini *mini, char **env)
 {
 	int		permission;
 	char	*path;
+	int		dir;
 
 	path = ft_strdup(mini->cmds.cmd[0]);
 	permission = check_permission(path);
-	if (permission == 1)
+	dir = check_dir(path);
+	if (permission == 1 && dir == 1)
 		call_execve(mini, env, path);
+	else if (permission == 1 && dir == 0)
+		error_dir(mini->cmds.cmd[0]);
 	else
 	{
 		if (permission == 2)
@@ -89,7 +100,6 @@ void	execute_shell(t_mini *mini)
 	char	**split;
 	char	**env_path;
 
-	g_check.exit_status = 0;
 	mini->glob.env_tab = list_to_tabl(mini->env);
 	env_path = ft_getenv("PATH", mini->env);
 	if (mini->cmds.cmd[0] != NULL
@@ -98,7 +108,7 @@ void	execute_shell(t_mini *mini)
 		execute_path(mini, mini->glob.env_tab);
 	else if (env_path == NULL)
 		check_cur_exec(mini, mini->glob.env_tab);
-	if (env_path != NULL)
+	else if (env_path != NULL)
 	{
 		free_tabl(env_path);
 		env_path = ft_getenv("PATH", mini->env);

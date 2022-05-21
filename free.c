@@ -6,7 +6,7 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 18:16:06 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/23 11:09:51 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/27 17:16:49 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	free_mini(t_mini *mini)
 		cf_lstclear(&mini->cmds.file, free);
 	if (mini->history != NULL)
 		ft_lstclear(&mini->history, free);
-	free_tabl(mini->glob.home);
+	if (mini->glob.home != NULL)
+		free_tabl(mini->glob.home);
 	if (mini->glob.oldpwd != NULL)
 		free(mini->glob.oldpwd);
 	free(mini->under_score);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/12 18:31:56 by abdel-ke          #+#    #+#             */
-/*   Updated: 2021/04/22 16:50:13 by abdel-ke         ###   ########.fr       */
+/*   Updated: 2021/04/29 11:41:50 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,42 +43,44 @@ int	compare(char *str, char *str2)
 
 int	redirection(t_symbol *smbl)
 {
-	if (smbl->great == ON)
+	if (smbl->read == ON)
 		return (62);
-	if (smbl->less == ON)
+	if (smbl->write == ON)
 		return (60);
-	if (smbl->d_great == ON)
+	if (smbl->append == ON)
 		return (63);
 	return (0);
 }
 
 char	*check_redirection(t_symbol *smbl, char *line, int i, int *type)
 {
-	if (smbl->d_quote == ON || smbl->s_quote == ON)
+	if (!count_back(line + (i - 1)))
 	{
-		if (line[i + 1] == '>')
-			line[i + 1] *= -1;
-		line[i] *= -1;
-	}
-	else
-	{
-		if (redirection(smbl) == OFF)
-			*type = ON;
-		else
+		if (smbl->d_quote == ON || smbl->s_quote == ON)
 		{
 			if (line[i + 1] == '>')
-				error_red(smbl, "syntax error near unexpected token", 63);
+				line[i + 1] *= -1;
+			line[i] *= -1;
+		}
+		else
+		{
+			if (redirection(smbl) == OFF)
+				*type = ON;
 			else
-				error_red(smbl, "syntax error near unexpected token", line[i]);
+			{
+				if (line[i + 1] == '>')
+					error_red(smbl, 63);
+				else
+					error_red(smbl, line[i]);
+			}
 		}
 	}
+	else
+		line[i] *= -1;
 	return (line);
 }
 
 int	check_flags(t_symbol *smbl)
 {
-	int	sum;
-
-	sum = smbl->d_great + smbl->less + smbl->great + smbl->semi + smbl->pipe;
-	return (sum);
+	return (smbl->append + smbl->write + smbl->read + smbl->semi + smbl->pipe);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_semi.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/15 10:27:30 by abdel-ke          #+#    #+#             */
-/*   Updated: 2021/04/22 17:05:28 by abdel-ke         ###   ########.fr       */
+/*   Updated: 2021/04/27 14:39:08 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@ char	*check_semi_off(t_symbol *smbl, char *line, int i)
 		line[i] *= -1;
 	else if (redirection(smbl))
 	{
-		ft_error(smbl, "1=>syntax error near unexpected token `;'");
+		ft_error(smbl, "syntax error near unexpected token `;'");
 		off_flags(smbl);
 	}
 	else
 	{
 		if (smbl->semi == ON)
 		{
-			ft_error(smbl, "2=>syntax error near unexpected token `;'");
+			ft_error(smbl, "syntax error near unexpected token `;;'");
 			smbl->semi = OFF;
 		}
 		else if (smbl->pipe == ON)
 		{
-			ft_error(smbl, "3=>syntax error near unexpected token `;'");
+			ft_error(smbl, "syntax error near unexpected token `;'");
 			off_flags(smbl);
 		}
 		else
@@ -52,7 +52,7 @@ char	*check_semicolone(t_symbol *smbl, char *line, int i)
 			if (smbl->semi == OFF)
 				smbl->semi = ON;
 			else
-				ft_error(smbl, "3=>syntax error near unexpected token `;'");
+				ft_error(smbl, "syntax error near unexpected token `;'");
 		}
 	}
 	return (line);
@@ -60,6 +60,7 @@ char	*check_semicolone(t_symbol *smbl, char *line, int i)
 
 void	ft_error_pipe_semi(t_symbol *smbl, char *str)
 {
+	ft_putstr("minishell: ");
 	ft_error(smbl, str);
 	off_flags(smbl);
 }
@@ -69,12 +70,13 @@ char	*check_pipe_off(t_symbol *smbl, char *line, int i)
 	if (count_back(line + (i - 1)))
 		line[i] *= -1;
 	else if (redirection(smbl))
-		ft_error_pipe_semi(smbl, "syntax error near unexpected token `|'");
+		ft_error_pipe_semi(smbl,
+			"syntax error near unexpected token `|'");
 	else
 	{
 		if (smbl->pipe == ON)
 		{
-			ft_error(smbl, "syntax error near unexpected token `|'");
+			ft_error(smbl, "syntax error near unexpected token `||'");
 			smbl->pipe = OFF;
 		}
 		else if (smbl->semi == ON)

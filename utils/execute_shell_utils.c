@@ -6,7 +6,7 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 11:45:39 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/22 11:30:44 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/29 11:14:13 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ int	check_permission(char *path)
 	}
 	else
 		return (3);
+}
+
+int	check_dir(char *path)
+{
+	DIR	*dir;
+
+	dir = opendir(path);
+	if (dir == NULL)
+		return (1);
+	closedir(dir);
+	return (0);
 }
 
 void	get_path(t_mini *mini, char **split, char **path, int *perm)

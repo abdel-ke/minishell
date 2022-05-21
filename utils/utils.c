@@ -6,11 +6,17 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 14:50:59 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/22 11:36:23 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/29 11:58:01 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	fd_put(int c)
+{
+	write(1, &c, 1);
+	return (0);
+}
 
 char	*ft_strndup(char *s, size_t len)
 {
@@ -38,21 +44,6 @@ void	ft_putstr(char *s)
 		write(1, &s[i], 1);
 		i++;
 	}
-}
-
-char	*ft_strncpy(char *str, int n)
-{
-	int		i;
-	char	*s;
-
-	i = 0;
-	s = malloc((ft_strlen(str) - 1) * sizeof(char));
-	while (i < n)
-	{
-		s[i] = str[i];
-		i++;
-	}
-	return (s);
 }
 
 int	ft_strcmp(char *s1, char *s2)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+         #
+#    By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/02 19:19:58 by amouassi          #+#    #+#              #
-#    Updated: 2021/04/23 13:38:13 by abdel-ke         ###   ########.fr        #
+#    Updated: 2021/04/29 11:51:15 by amouassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,7 @@ SRC = utils/utils.c \
 	  utils/utils3.c \
 	  utils/utils4.c \
 	  utils/env_utils.c \
+	  utils/env_utils2.c \
 	  utils/list_utils.c \
 	  utils/list_utils2.c \
 	  utils/list_utils3.c \
@@ -85,8 +86,11 @@ SRC = utils/utils.c \
 	  builtins/execute_echo.c \
 	  builtins/execute_exit.c \
 	  builtins/mod_old_pwd.c \
+	  builtins/cd_utils.c \
+	  builtins/echo_utils.c \
 	  errors/errors.c \
 	  errors/exec_errors.c \
+	  errors/exec_errors2.c \
 	  execute_cmd.c \
 	  execute_shell.c \
 	  call_execve.c \
@@ -94,9 +98,11 @@ SRC = utils/utils.c \
 	  shlvl.c \
 	  main.c \
 	  redirections/create_files.c \
+	  redirections/create_files_err.c \
 	  redirections/redir.c \
 	  readline.c \
 	  termcap.c \
+	  termcap_utils.c \
 	  history.c \
 	  parsing/parsing.c \
 	  parsing/symbols.c \
@@ -107,6 +113,7 @@ SRC = utils/utils.c \
 	  parsing/redirection.c\
 	  parsing/push_to_struct.c\
 	  parsing/dollar_utils.c\
+	  parsing/dollar_utils2.c\
 	  parsing/pipe_semi.c
 
 OBJ = $(SRC:.c=.o)

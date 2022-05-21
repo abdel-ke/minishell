@@ -6,7 +6,7 @@
 /*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 11:11:33 by amouassi          #+#    #+#             */
-/*   Updated: 2021/04/22 14:19:25 by amouassi         ###   ########.fr       */
+/*   Updated: 2021/04/29 16:27:50 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	print_list(t_list *list, int fd)
 	{
 		while (tmp != NULL)
 		{
-			ft_putendl_fd(tmp->content, fd);
+			if (ft_strncmp(tmp->content, "_=", 2) != 0)
+				ft_putendl_fd(tmp->content, fd);
 			tmp = tmp->next;
 		}
 	}

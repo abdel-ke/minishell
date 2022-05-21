@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdel-ke <abdel-ke@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouassi <amouassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/12 18:30:58 by abdel-ke          #+#    #+#             */
-/*   Updated: 2021/04/24 14:52:24 by abdel-ke         ###   ########.fr       */
+/*   Updated: 2021/04/29 11:19:45 by amouassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*last_word(char *line)
 	int	i;
 
 	i = ft_strlen(line) - 1;
-	while (line[i - 1] && line[i - 1] != ' ')
+	while (i != 0 && line[i] != ' ')
 		i--;
 	return (line + i);
 }
@@ -73,39 +73,18 @@ char	*dollar(t_mini *mini, char *line)
 
 char	*check_dollr(t_mini *mini, char *line)
 {
-	char	*new;
-	char	*tmp;
-	int		i;
+	int	i;
 
 	i = -1;
-	new = NULL;
 	while (line[++i])
 	{
-		if (line[i] == '$' && !count_back(line + (i - 1))
-			&& !ft_strchr("0123456789", line[i + 1]))
+		if (line[i] == '$' && !count_back(line + (i - 1)))
 		{
-			new = dollar(mini, line + i + 1);
-			line[i] = 0;
-			tmp = ft_strjoin(line, new);
-			if (line)
-				free(line);
-			line = tmp;
-			i = 0;
-			if (new != NULL)
-				free(new);
-		}
-		else if (line[i] == '$' && !count_back(line + (i - 1))
-			&& !ft_strchr(mini->check_env, line[i + 1]))
-		{
-			new = dollar(mini, line + i + 1);
-			line[i] = 0;
-			tmp = ft_strjoin(line, new);
-			if (line)
-				free(line);
-			line = tmp;
-			i = 0;
-			if (new != NULL)
-				free(new);
+			if (ft_isdigit(line[i + 1]))
+				line = dollar_digit(line, &i);
+			else if (!ft_strchr(mini->check_env, line[i + 1])
+				|| line[i + 1] == '?')
+				line = dollar_simple(mini, line, &i);
 		}
 		else if ((line[i] == '$') && count_back(line + (i - 1)))
 			line[i] *= -1;
